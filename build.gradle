@@ -40,7 +40,7 @@ dependencies {
 
     apt 'org.projectlombok:lombok:1.16.2'
 
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    provided fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.google.code.gson:gson:2.3.1'
 
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.0'
@@ -95,4 +95,9 @@ task(generateLombokPublicApiJar) {
     }
 }
 
+task(copyTestRobolectricConfig, type: Copy) {
+    from 'src/test/resources'
+    into 'build/test-classes/debug'
+}
 
+tasks.preBuild.dependsOn copyTestRobolectricConfig
