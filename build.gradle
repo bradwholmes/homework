@@ -6,22 +6,24 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:1.0.0'
         classpath 'com.github.jcandksolutions.gradle:android-unit-test:2.1.1'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
     }
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    buildToolsVersion '21.1.2'
 
     defaultConfig {
         minSdkVersion 8
         targetSdkVersion 21
         versionCode 1
-        versionName "1.0.0"
-        applicationId "com.phunware"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        versionName '1.0.0'
+        applicationId 'com.phunware'
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
 
     packagingOptions {
@@ -35,6 +37,9 @@ dependencies {
     repositories {
         mavenCentral()
     }
+
+    apt 'org.projectlombok:lombok:1.16.2'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
 
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.0'
     androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
@@ -63,3 +68,29 @@ dependencies {
         exclude module: 'wagon-provider-api'
     }
 }
+
+task(generateLombokPublicApiJar) {
+    def libsDirectory = project.file(new File(project.projectDir, "/libs/"))
+
+    doFirst {
+        print 'deleting'
+        if (!libsDirectory.exists()) {
+            libsDirectory.mkdirs()
+        } else {
+            new File(libsDirectory, 'lombok-api.jar').delete()
+        }
+    }
+
+    doLast {
+        println 'creating'
+        def lombokDependency = project.configurations.apt
+                .find { dependency -> dependency.name.contains("lombok") }
+
+        project.javaexec {
+            main = '-jar'
+            args = [lombokDependency, 'publicApi', project.file(new File(project.projectDir, "/libs/"))]
+        }
+    }
+}
+
+
