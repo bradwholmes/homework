@@ -7,6 +7,7 @@ import com.phunware.activity.HomeScreen;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -25,5 +26,10 @@ public class HomeScreenTest extends ActivityInstrumentationTestCase2<HomeScreen>
     public void testSaysHello() {
         onView(withId(R.id.hello))
                 .check(matches(withText(R.string.hello_world)));
+    }
+
+    public void testToolbarShouldHaveAppName() {
+        onView(withText(R.string.app_name))
+                .check(matches(isDisplayed()));
     }
 }

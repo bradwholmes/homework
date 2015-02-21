@@ -40,6 +40,8 @@ dependencies {
 
     apt 'org.projectlombok:lombok:1.16.2'
 
+    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.android.support:support-v4:21.0.3'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.google.code.gson:gson:2.3.1'
 
@@ -51,6 +53,7 @@ dependencies {
     testCompile 'org.hamcrest:hamcrest-library:1.1'
     testCompile 'org.hamcrest:hamcrest-integration:1.1'
     testCompile 'com.squareup:fest-android:1.0.8'
+    testCompile 'com.android.support:appcompat-v7:21.0.3'
 
     testCompile('org.robolectric:robolectric:2.4') {
         exclude module: 'classworlds'
@@ -75,7 +78,6 @@ task(generateLombokPublicApiJar) {
     def libsDirectory = project.file(new File(project.projectDir, "/libs/"))
 
     doFirst {
-        print 'deleting'
         if (!libsDirectory.exists()) {
             libsDirectory.mkdirs()
         } else {
@@ -84,7 +86,6 @@ task(generateLombokPublicApiJar) {
     }
 
     doLast {
-        println 'creating'
         def lombokDependency = project.configurations.apt
                 .find { dependency -> dependency.name.contains("lombok") }
 
