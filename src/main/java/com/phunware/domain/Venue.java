@@ -27,8 +27,8 @@ public class Venue implements Serializable {
     @SerializedName("tollfreephone") private String mTollFreePhone;
     @SerializedName("url") private String mUrl;
     @SerializedName("description") private String mDescription;
-    @SerializedName("ticketlink") private String mTicketLink;
-    @SerializedName("imageurl") private String mImageUrl;
+    @SerializedName("ticket_link") private String mTicketLink;
+    @SerializedName("image_url") private String mImageUrl;
     @SerializedName("schedule") private ArrayList<ScheduleItem> mSchedule;
 
     public String getFullAddress() {

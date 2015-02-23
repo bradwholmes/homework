@@ -6,11 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import com.google.common.base.Strings;
 import com.phunware.R;
 import com.phunware.domain.ScheduleItem;
 import com.phunware.domain.Venue;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -32,6 +35,7 @@ public class VenueDetails extends Fragment {
     }
 
     @Override public void onViewCreated(View view, Bundle savedInstanceState) {
+        ImageView photo = (ImageView) view.findViewById(R.id.photo);
         TextView name = (TextView) view.findViewById(R.id.name);
         TextView address = (TextView) view.findViewById(R.id.address);
         ListView listView = (ListView) view.findViewById(R.id.schedule);
@@ -39,6 +43,13 @@ public class VenueDetails extends Fragment {
         Venue venue = (Venue) getArguments().getSerializable(KEY_VENUE);
         name.setText(venue.getName());
         address.setText(venue.getFullAddress());
+
+        if(!Strings.isNullOrEmpty(venue.getImageUrl())) {
+            Picasso.with(getActivity())
+                    .load(venue.getImageUrl())
+                    .fit()
+                    .into(photo);
+        }
 
         ArrayList<ScheduleItem> schedule = venue.getSchedule();
         if (schedule != null) {
