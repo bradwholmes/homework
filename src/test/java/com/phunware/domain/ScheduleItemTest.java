@@ -8,6 +8,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import static org.fest.assertions.api.Assertions.assertThat;
@@ -33,17 +34,42 @@ public class ScheduleItemTest {
             .create();
 
     @Test
-    public void should_deserialize_start_time_correctly() throws ParseException {
+    public void shouldDeserializeStartTimeCorrectly() throws ParseException {
         ScheduleItem deserializedItem = mGson.fromJson(mRawSampleSchedule, ScheduleItem.class);
 
         assertThat(deserializedItem.getStartDate()).isEqualTo(mParsedStartDate);
     }
 
     @Test
-    public void should_deserialize_end_time_correctly() throws ParseException {
+    public void shouldDeserializeEndTimeCorrectly() throws ParseException {
         ScheduleItem deserializedItem = mGson.fromJson(mRawSampleSchedule, ScheduleItem.class);
 
         assertThat(deserializedItem.getEndDate()).isEqualTo(mParsedEndDate);
+    }
+
+    @Test
+    public void shouldToStringAsDisplayableText() {
+        Calendar start = Calendar.getInstance();
+        start.set(Calendar.YEAR, 2015);
+        start.set(Calendar.MONTH, Calendar.FEBRUARY);
+        start.set(Calendar.DAY_OF_MONTH, 23);
+        start.set(Calendar.HOUR_OF_DAY, 8);
+        start.set(Calendar.MINUTE, 0);
+
+        Calendar end = Calendar.getInstance();
+        end.set(Calendar.YEAR, 2015);
+        end.set(Calendar.MONTH, Calendar.FEBRUARY);
+        end.set(Calendar.DAY_OF_MONTH, 24);
+        end.set(Calendar.HOUR_OF_DAY, 0);
+        end.set(Calendar.MINUTE, 0);
+
+        ScheduleItem scheduleItem = new ScheduleItem()
+                .setStartDate(start.getTime())
+                .setEndDate(end.getTime());
+
+        String displayText = scheduleItem.toString();
+
+        assertThat(displayText).isEqualTo("Monday 2/23 8:00am to 12:00am");
     }
 
     private Date parseDate(String rawStartDate) {

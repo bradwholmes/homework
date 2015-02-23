@@ -5,9 +5,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import com.phunware.R;
+import com.phunware.domain.ScheduleItem;
 import com.phunware.domain.Venue;
+
+import java.util.ArrayList;
 
 public class VenueDetails extends Fragment {
 
@@ -27,9 +32,17 @@ public class VenueDetails extends Fragment {
     }
 
     @Override public void onViewCreated(View view, Bundle savedInstanceState) {
-        Venue venue = (Venue) getArguments().getSerializable(KEY_VENUE);
+        TextView name = (TextView) view.findViewById(R.id.name);
+        TextView address = (TextView) view.findViewById(R.id.address);
+        ListView listView = (ListView) view.findViewById(R.id.schedule);
 
-        TextView venueName = (TextView) view.findViewById(R.id.venue_name);
-        venueName.setText(venue.getName());
+        Venue venue = (Venue) getArguments().getSerializable(KEY_VENUE);
+        name.setText(venue.getName());
+        address.setText(venue.getFullAddress());
+
+        ArrayList<ScheduleItem> schedule = venue.getSchedule();
+        if (schedule != null) {
+            listView.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.schedule_item, schedule));
+        }
     }
 }

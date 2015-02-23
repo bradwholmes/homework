@@ -8,15 +8,19 @@ import com.phunware.activity.Details;
 import com.phunware.domain.ScheduleItem;
 import com.phunware.domain.Venue;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.anything;
 
 @LargeTest
 public class DetailsTest extends ActivityInstrumentationTestCase2<Details> {
 
-    private static final String VENUE_NAME = "venue name";
+    private final String mVenueName = "venue name";
+    private final String mCity = "Austin";
+    private final String mScheduledTime = "Monday 2/23 8:00am to 12pm";
 
     public DetailsTest() {
         super(Details.class);
@@ -26,10 +30,10 @@ public class DetailsTest extends ActivityInstrumentationTestCase2<Details> {
         super.setUp();
 
         Venue venue = new Venue()
-                .setName(VENUE_NAME)
-                .setCity("Austin")
+                .setName(mVenueName)
+                .setCity(mCity)
                 .setSchedule(Lists.newArrayList(
-                        new ScheduleItem()
+                        getScheduleItem(mScheduledTime)
                 ));
 
         setActivityIntent(Details.create(getInstrumentation().getContext(), venue));
@@ -37,8 +41,24 @@ public class DetailsTest extends ActivityInstrumentationTestCase2<Details> {
         getActivity();
     }
 
-    public void testShowVenueName() {
-        onView(withId(R.id.venue_name))
-                .check(matches(withText(VENUE_NAME)));
+    public void testShowVenueInformation() {
+        onView(withId(R.id.name))
+                .check(matches(withText(mVenueName)));
+
+        onView(withId(R.id.address))
+                .check(matches(withText(mCity)));
+
+        onData(anything())
+                .inAdapterView(withId(R.id.schedule))
+                .atPosition(0)
+                .check(matches(withText(mScheduledTime)));
+    }
+
+    private ScheduleItem getScheduleItem(final String scheduledTime) {
+        return new ScheduleItem() {
+            @Override public String toString() {
+                return scheduledTime;
+            }
+        };
     }
 }
