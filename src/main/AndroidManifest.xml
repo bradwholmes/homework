@@ -10,8 +10,7 @@
             android:theme="@style/Theme.MyTheme">
 
         <activity
-                android:name=".activity.HomeScreen"
-                android:screenOrientation="portrait">
+                android:name=".activity.HomeScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

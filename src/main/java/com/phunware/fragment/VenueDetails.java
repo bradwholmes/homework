@@ -41,6 +41,8 @@ public class VenueDetails extends Fragment {
         ListView listView = (ListView) view.findViewById(R.id.schedule);
 
         Venue venue = (Venue) getArguments().getSerializable(KEY_VENUE);
+        if(venue == null) return;
+
         name.setText(venue.getName());
         address.setText(venue.getFullAddress());
 
