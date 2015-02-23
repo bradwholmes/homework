@@ -4,12 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.phunware.activity.HomeScreen;
 import com.phunware.api.PhunwareS3Service;
+import com.phunware.fragment.VenueList;
 import dagger.Module;
 import dagger.Provides;
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
 
-@Module(injects = HomeScreen.class, library = true)
+@Module(injects = {HomeScreen.class, VenueList.class},
+        library = true)
 public class ApplicationModule {
     @Provides Gson provideGson() {
         return new GsonBuilder()

@@ -16,9 +16,8 @@
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-    <android.support.v7.widget.RecyclerView
-            android:id="@+id/venues"
-            android:scrollbars="vertical"
+    <fragment
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:name="com.phunware.fragment.VenueList"/>
 </LinearLayout>
