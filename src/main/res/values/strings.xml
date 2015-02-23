@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">Phunware Sample App</string>
     <string name="hello_world">Hello World!</string>
+    <string name="details_title">Details</string>
 </resources>

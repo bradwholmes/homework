@@ -15,6 +15,7 @@ import rx.Observable;
 import java.util.List;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -49,6 +50,14 @@ public class HomeScreenTest extends ActivityInstrumentationTestCase2<HomeScreen>
         onView(withText(mVenueName))
                 .check(matches(isDisplayed()));
         onView(withText(mAddress + ", " + mCity + ", " + mState))
+                .check(matches(isDisplayed()));
+    }
+
+    public void testOpenDetailsForVenue() {
+        onView(withText(mVenueName))
+                .perform(click());
+
+        onView(withText(R.string.details_title))
                 .check(matches(isDisplayed()));
     }
 

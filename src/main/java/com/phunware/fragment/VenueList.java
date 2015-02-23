@@ -1,5 +1,6 @@
 package com.phunware.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.phunware.Injector;
 import com.phunware.R;
+import com.phunware.activity.Details;
 import com.phunware.api.PhunwareS3Service;
 import com.phunware.domain.Venue;
 import com.phunware.ui.HorizontalRule;
@@ -62,7 +64,7 @@ public class VenueList extends Fragment {
                 });
     }
 
-    private static class VenuesAdapter extends RecyclerView.Adapter<VenueViewHolder> {
+    private class VenuesAdapter extends RecyclerView.Adapter<VenueViewHolder> {
         private List<Venue> venues;
 
         public VenuesAdapter(List<Venue> venues) {
@@ -70,16 +72,12 @@ public class VenueList extends Fragment {
         }
 
         @Override public VenueViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.venue_summary, parent, false);
-            return new VenueViewHolder(view);
+            return new VenueViewHolder(LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.venue_summary, parent, false));
         }
 
         @Override public void onBindViewHolder(VenueViewHolder holder, int position) {
-            Venue venue = venues.get(position);
-            holder.mName.setText(venue.getName());
-            String fullAddress = venue.getFullAddress();
-            holder.mAddress.setText(fullAddress);
+            holder.bind(venues.get(position));
         }
 
         @Override public int getItemCount() {
@@ -87,16 +85,26 @@ public class VenueList extends Fragment {
         }
     }
 
-    private static class VenueViewHolder extends RecyclerView.ViewHolder {
+    private class VenueViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public final TextView mName;
         private final TextView mAddress;
 
         public VenueViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
 
             mName = (TextView) itemView.findViewById(R.id.name);
             mAddress = (TextView) itemView.findViewById(R.id.address);
+        }
+
+        public void bind(Venue venue) {
+            mName.setText(venue.getName());
+            mAddress.setText(venue.getFullAddress());
+        }
+
+        @Override public void onClick(View view) {
+            startActivity(new Intent(getActivity(), Details.class));
         }
     }
 }
