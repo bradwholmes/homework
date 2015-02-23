@@ -1,13 +1,17 @@
 package com.phunware.domain;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.util.List;
 
 @Accessors(prefix = {"m"})
 @Getter
+@Setter
 public class Venue {
     @SerializedName("id") private long mId;
     @SerializedName("pcode") private int mPcode;
@@ -25,4 +29,9 @@ public class Venue {
     @SerializedName("ticketlink") private String mTicketLink;
     @SerializedName("imageurl") private String mImageUrl;
     @SerializedName("schedule") private List<ScheduleItem> mSchedule;
+
+    public String getFullAddress() {
+        Joiner joiner = Joiner.on(", ").skipNulls();
+        return joiner.join(Strings.emptyToNull(mAddress), Strings.emptyToNull(mCity), Strings.emptyToNull(mState));
+    }
 }

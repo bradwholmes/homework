@@ -14,25 +14,65 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+import com.phunware.Injector;
 import com.phunware.R;
+import com.phunware.api.PhunwareS3Service;
+import com.phunware.domain.Venue;
+import com.phunware.ui.HorizontalRule;
+import retrofit.RestAdapter;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
+import javax.inject.Inject;
+import java.util.List;
 
 public class HomeScreen extends ActionBarActivity {
+
+    @Inject PhunwareS3Service phunwareS3Service;
+    @Inject RestAdapter restAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Injector.inject(this);
+
         setContentView(R.layout.activity_home_screen);
 
         setSupportActionBar((Toolbar) findViewById(R.id.action_bar));
 
-        RecyclerView venues = (RecyclerView) findViewById(R.id.venues);
+        final RecyclerView venues = (RecyclerView) findViewById(R.id.venues);
         venues.setHasFixedSize(true);
         venues.setLayoutManager(new LinearLayoutManager(this));
         venues.addItemDecoration(new HorizontalRule(this));
-        venues.setAdapter(new VenuesAdapter());
+
+        phunwareS3Service.getVenues()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<List<Venue>>() {
+                            @Override public void onCompleted() {
+                            }
+
+                            @Override public void onError(Throwable e) {
+                                Toast.makeText(HomeScreen.this, "An error occurred retrieving data.", Toast.LENGTH_SHORT)
+                                        .show();
+                            }
+
+                            @Override public void onNext(List<Venue> venuesData) {
+                                venues.setAdapter(new VenuesAdapter(venuesData));
+                            }
+                        });
     }
 
     private static class VenuesAdapter extends RecyclerView.Adapter<VenueViewHolder> {
+        private List<Venue> venues;
+
+        public VenuesAdapter(List<Venue> venues) {
+            this.venues = venues;
+        }
+
         @Override public VenueViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.venue_summary, parent, false);
@@ -40,42 +80,27 @@ public class HomeScreen extends ActionBarActivity {
         }
 
         @Override public void onBindViewHolder(VenueViewHolder holder, int position) {
-
+            Venue venue = venues.get(position);
+            holder.mName.setText(venue.getName());
+            String fullAddress = venue.getFullAddress();
+            holder.mAddress.setText(fullAddress);
         }
 
         @Override public int getItemCount() {
-            return 1;
+            return venues.size();
         }
     }
 
     private static class VenueViewHolder extends RecyclerView.ViewHolder {
+
+        public final TextView mName;
+        private final TextView mAddress;
+
         public VenueViewHolder(View itemView) {
             super(itemView);
-        }
-    }
 
-    private static class HorizontalRule extends RecyclerView.ItemDecoration {
-        private Paint paint = new Paint();
-
-        public HorizontalRule(Context context) {
-            paint.setColor(Color.BLACK);
-            paint.setStyle(Paint.Style.STROKE);
-            DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-            float strokeWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, displayMetrics);
-            paint.setStrokeWidth(strokeWidth);
-        }
-
-        @Override public void onDraw(Canvas canvas, RecyclerView parent, RecyclerView.State state) {
-            int left = parent.getLeft() + parent.getPaddingLeft();
-            int right = parent.getRight() - parent.getPaddingRight();
-
-            final int childCount = parent.getChildCount();
-            for (int i = 0; i < childCount; i++) {
-                final View child = parent.getChildAt(i);
-                final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
-                int y = child.getBottom() + params.bottomMargin;
-                canvas.drawLine(left, y, right, y, paint);
-            }
+            mName = (TextView) itemView.findViewById(R.id.name);
+            mAddress = (TextView) itemView.findViewById(R.id.address);
         }
     }
 }
