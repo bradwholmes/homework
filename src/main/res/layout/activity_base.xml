@@ -16,9 +16,8 @@
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-    <fragment
-            android:id="@+id/fragment_venues"
+    <FrameLayout
+            android:id="@+id/content_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:name="com.phunware.fragment.VenueList"/>
+            android:layout_height="match_parent"/>
 </LinearLayout>

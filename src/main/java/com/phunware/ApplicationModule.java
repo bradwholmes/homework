@@ -2,6 +2,7 @@ package com.phunware;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.phunware.activity.Details;
 import com.phunware.activity.HomeScreen;
 import com.phunware.api.PhunwareS3Service;
 import com.phunware.fragment.VenueList;
@@ -10,7 +11,7 @@ import dagger.Provides;
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
 
-@Module(injects = {HomeScreen.class, VenueList.class},
+@Module(injects = {HomeScreen.class, VenueList.class, Details.class},
         library = true)
 public class ApplicationModule {
     @Provides Gson provideGson() {
