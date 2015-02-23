@@ -66,11 +66,11 @@ public class HomeScreenTest extends ActivityInstrumentationTestCase2<HomeScreen>
         @Provides PhunwareS3Service providesPhunwareS3Service() {
             return new PhunwareS3Service() {
                 @Override public Observable<List<Venue>> getVenues() {
-                    Venue venue = new Venue();
-                    venue.setName(mVenueName);
-                    venue.setAddress(mAddress);
-                    venue.setCity(mCity);
-                    venue.setState(mState);
+                    Venue venue = new Venue()
+                    .setName(mVenueName)
+                    .setAddress(mAddress)
+                    .setCity(mCity)
+                    .setState(mState);
 
                     return Observable.just(asList(venue));
                 }

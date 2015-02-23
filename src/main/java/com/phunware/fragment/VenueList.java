@@ -1,6 +1,5 @@
 package com.phunware.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -87,6 +86,7 @@ public class VenueList extends Fragment {
 
     private class VenueViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        private Venue mVenue;
         public final TextView mName;
         private final TextView mAddress;
 
@@ -99,12 +99,13 @@ public class VenueList extends Fragment {
         }
 
         public void bind(Venue venue) {
+            mVenue = venue;
             mName.setText(venue.getName());
             mAddress.setText(venue.getFullAddress());
         }
 
         @Override public void onClick(View view) {
-            startActivity(new Intent(getActivity(), Details.class));
+            startActivity(Details.create(getActivity(), mVenue));
         }
     }
 }

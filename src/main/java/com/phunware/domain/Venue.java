@@ -7,12 +7,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import java.util.List;
+import java.io.Serializable;
+import java.util.ArrayList;
 
-@Accessors(prefix = {"m"})
+@Accessors(prefix = {"m"}, chain = true)
 @Getter
 @Setter
-public class Venue {
+public class Venue implements Serializable {
     @SerializedName("id") private long mId;
     @SerializedName("pcode") private int mPcode;
     @SerializedName("latitude") private double mLatitude;
@@ -28,7 +29,7 @@ public class Venue {
     @SerializedName("description") private String mDescription;
     @SerializedName("ticketlink") private String mTicketLink;
     @SerializedName("imageurl") private String mImageUrl;
-    @SerializedName("schedule") private List<ScheduleItem> mSchedule;
+    @SerializedName("schedule") private ArrayList<ScheduleItem> mSchedule;
 
     public String getFullAddress() {
         Joiner joiner = Joiner.on(", ").skipNulls();
