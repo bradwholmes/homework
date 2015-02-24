@@ -4,10 +4,10 @@ homework
 Needs android-21 and the latest android repositories that contain the support libraries.
 
 Build and run unit-tests
-[code]./gradlew build[/code] 
+./gradlew build
 
 Run integration/ui tests
-[code]./gradle connectedAndroidTest[/code]
+./gradle connectedAndroidTest
 
 Install apk
-[code]./gradlew installDebug[/code]
+./gradlew installDebug
