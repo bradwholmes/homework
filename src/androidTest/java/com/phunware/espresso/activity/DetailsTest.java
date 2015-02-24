@@ -8,6 +8,8 @@ import com.phunware.activity.Details;
 import com.phunware.domain.ScheduleItem;
 import com.phunware.domain.Venue;
 
+import java.io.Serializable;
+
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -32,8 +34,8 @@ public class DetailsTest extends ActivityInstrumentationTestCase2<Details> {
         Venue venue = new Venue()
                 .setName(mVenueName)
                 .setCity(mCity)
-                .setSchedule(Lists.newArrayList(
-                        getScheduleItem(mScheduledTime)
+                .setSchedule(Lists.<ScheduleItem>newArrayList(
+                        new TestScheduleItem(mScheduledTime)
                 ));
 
         setActivityIntent(Details.create(getInstrumentation().getContext(), venue));
@@ -54,11 +56,16 @@ public class DetailsTest extends ActivityInstrumentationTestCase2<Details> {
                 .check(matches(withText(mScheduledTime)));
     }
 
-    private ScheduleItem getScheduleItem(final String scheduledTime) {
-        return new ScheduleItem() {
-            @Override public String toString() {
-                return scheduledTime;
-            }
-        };
+    private static class TestScheduleItem extends ScheduleItem implements Serializable {
+
+        private String mScheduledTime;
+
+        private TestScheduleItem(String scheduledTime) {
+            mScheduledTime = scheduledTime;
+        }
+
+        @Override public String toString() {
+            return mScheduledTime;
+        }
     }
 }

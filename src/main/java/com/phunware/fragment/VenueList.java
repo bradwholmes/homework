@@ -1,5 +1,6 @@
 package com.phunware.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.phunware.Injector;
 import com.phunware.R;
-import com.phunware.activity.Details;
+import com.phunware.activity.DetailsLauncher;
 import com.phunware.api.PhunwareS3Service;
 import com.phunware.domain.Venue;
 import com.phunware.ui.HorizontalRule;
@@ -105,7 +106,12 @@ public class VenueList extends Fragment {
         }
 
         @Override public void onClick(View view) {
-            startActivity(Details.create(getActivity(), mVenue));
+            Activity activity = getActivity();
+            if(activity instanceof DetailsLauncher) {
+                ((DetailsLauncher) activity).showVenue(mVenue);
+            } else {
+                throw new RuntimeException("VenueList must be attached to an activity that implements DetailsLauncher");
+            }
         }
     }
 }

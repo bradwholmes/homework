@@ -9,7 +9,7 @@ import org.robolectric.RobolectricTestRunner;
 public class HomeScreenTest {
 
     @Test public void shouldCreateActivity() throws Exception {
-        HomeScreen activity = Robolectric.buildActivity(HomeScreen.class)
+        DetailsLauncher activity = Robolectric.buildActivity(HomeScreen.class)
                 .create()
                 .start()
                 .resume()

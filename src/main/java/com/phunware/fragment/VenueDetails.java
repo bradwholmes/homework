@@ -40,7 +40,10 @@ public class VenueDetails extends Fragment {
         TextView address = (TextView) view.findViewById(R.id.address);
         ListView listView = (ListView) view.findViewById(R.id.schedule);
 
-        Venue venue = (Venue) getArguments().getSerializable(KEY_VENUE);
+        Bundle arguments = getArguments();
+        if(arguments == null) return;
+
+        Venue venue = (Venue) arguments.getSerializable(KEY_VENUE);
         if(venue == null) return;
 
         name.setText(venue.getName());
@@ -49,7 +52,6 @@ public class VenueDetails extends Fragment {
         if(!Strings.isNullOrEmpty(venue.getImageUrl())) {
             Picasso.with(getActivity())
                     .load(venue.getImageUrl())
-                    .fit()
                     .into(photo);
         }
 
